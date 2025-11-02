@@ -1,0 +1,223 @@
+body {
+    background-color: #f0f0f0;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+#atm-machine {
+    width: 600px; 
+    height: 900px; 
+    background-color: #c0c0c0;
+    border: 3px solid #555;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+#atm-top-panel {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #a0a0a0;
+    border-bottom: 2px solid #777;
+    border-radius: 10px 10px 0 0;
+}
+
+.slot-label {
+    font-size: 10px;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+#card-slot-visual, #receipt-slot-visual {
+    width: 150px;
+    height: 40px;
+    background-color: #333;
+    border: 2px solid #222;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: inset 0 3px 5px rgba(0,0,0,0.5);
+}
+
+#card-element {
+    width: 90px;
+    height: 60px;
+    background: linear-gradient(45deg, #ffd700, #f0c040);
+    border: 1px solid #a08030;
+    border-radius: 5px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -70px; 
+    transition: bottom 1.5s ease-in-out;
+}
+#card-element.inserted {
+    bottom: 10px; 
+}
+#card-element.ejected {
+    bottom: -70px;
+}
+
+#atm-center-panel {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #b0b0b0;
+}
+
+#atm-screen-container {
+    background-color: #1a1a1a;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.7);
+}
+
+#atm-screen {
+    background-color: #003366; 
+    color: #ccffcc;
+    font-family: 'Orbitron', sans-serif;
+    height: 400px;
+    padding: 20px;
+    border: 3px solid #555;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+}
+
+#screen-display {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#screen-text {
+    white-space: pre-wrap;
+    font-size: 16px;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+#input-line-container {
+    font-size: 18px;
+    height: 30px;
+    display: none; 
+    align-items: center;
+}
+
+#input-line {
+    border-bottom: 2px solid #ccffcc;
+    min-width: 100px;
+    text-align: left;
+    letter-spacing: 5px; 
+}
+
+#input-cursor {
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+    from, to { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.screen-button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+.screen-button {
+    width: 50px;
+    height: 50px;
+    background-color: #777;
+    border: 2px solid #555;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.screen-button:active {
+    background-color: #999;
+}
+.screen-button-container.left { margin-right: 20px; }
+.screen-button-container.right { margin-left: 20px; }
+
+
+#atm-bottom-panel {
+    padding: 20px;
+    background-color: #a0a0a0;
+    border-top: 2px solid #777;
+    border-radius: 0 0 10px 10px;
+}
+
+#keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+.keypad-btn {
+    height: 60px;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    background-color: #e0e0e0;
+    border: 2px solid #888;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #888;
+    transition: all 0.05s ease;
+}
+.keypad-btn:active {
+    background-color: #ccc;
+    box-shadow: 0 1px 0 #888;
+    transform: translateY(2px);
+}
+.keypad-btn:disabled {
+    background-color: #bbb;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: 0 3px 0 #777;
+}
+
+.keypad-btn.action[data-key="cancel"] { background-color: #ff4d4d; color: white; }
+.keypad-btn.action[data-key="clear"] { background-color: #ffcc00; color: white; }
+.keypad-btn.action[data-key="enter"] { background-color: #4CAF50; color: white; }
+
+.hidden {
+    display: none !important;
+}
+
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#loading-spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #003366;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Bank Berkom A Tebal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div id="atm-machine">
+        <div id="atm-top-panel">
+            <div id="card-slot-visual">
+                <div class="slot-label">CARD SLOT</div>
+                <div id="card-element"></div>
+            </div>
+            <div id="receipt-slot-visual">
+                <div class="slot-label">RECEIPT</div>
+            </div>
+        </div>
+
+        <div id="atm-center-panel">
+            <div id="atm-screen-container">
+                <div id="atm-screen">
+                    <div class="screen-button-container left">
+                        <button class="screen-button" id="btn-l1"></button>
+                        <button class="screen-button" id="btn-l2"></button>
+                        <button class="screen-button" id="btn-l3"></button>
+                        <button class="screen-button" id="btn-l4"></button>
+                    </div>
+
+                    <div id="screen-display">
+                        <div id="screen-text"></div>
+                        <div id="input-line-container">
+                            <span id="input-prompt"></span>
+                            <span id="input-line"></span>
+                            <span id="input-cursor">_</span>
+                        </div>
+                    </div>
+
+                    <div class="screen-button-container right">
+                        <button class="screen-button" id="btn-r1"></button>
+                        <button class="screen-button" id="btn-r2"></button>
+                        <button class="screen-button" id="btn-r3"></button>
+                        <button class="screen-button" id="btn-r4"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="atm-bottom-panel">
+            <div id="keypad">
+                <button class="keypad-btn" data-key="1">1</button>
+                <button class="keypad-btn" data-key="2">2</button>
+                <button class="keypad-btn" data-key="3">3</button>
+                <button class="keypad-btn action" data-key="cancel">CANCEL</button>
+                
+                <button class="keypad-btn" data-key="4">4</button>
+                <button class="keypad-btn" data-key="5">5</button>
+                <button class="keypad-btn" data-key="6">6</button>
+                <button class="keypad-btn action" data-key="clear">CLEAR</button>
+                
+                <button class="keypad-btn" data-key="7">7</button>
+                <button class="keypad-btn" data-key="8">8</button>
+                <button class="keypad-btn" data-key="9">9</button>
+                <button class="keypad-btn action" data-key="enter">ENTER</button>
+                
+                <button class="keypad-btn" data-key="." disabled>.</button>
+                <button class="keypad-btn" data-key="0">0</button>
+                <button class="keypad-btn" data-key="00" disabled>00</button>
+                <button class="keypad-btn" data-key="dummy" disabled></button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="loading-overlay" class="hidden">
+        <div id="loading-spinner"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
