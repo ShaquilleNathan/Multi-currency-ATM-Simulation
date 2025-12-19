@@ -112,7 +112,7 @@ def load_language(lang_code):
             "jumlah_receipt": "JUMLAH            : {}",
             "sisa_saldo_receipt": "SISA SALDO        : {}",
             "waktu_transaksi_receipt": "WAKTU TRANSAKSI   : {}",
-            "header_transfer": "===================ATM TRANSFER===================",
+            "header_transfer": "===ATM TRANSFER===",
             "prompt_kode_bank_rek": "MASUKKAN KODE BANK DAN NOMOR REKENING TUJUAN",
             "ket_kode_bank_rek": "3 digit kode bank diikuti nomor rekening",
             "contoh_transfer": "Cth. 0011234567 (Untuk BRI)",
@@ -131,7 +131,7 @@ def load_language(lang_code):
             "data_sesuai_tanya": "Apakah data sudah sesuai (y/n)? ",
             "transaksi_selesai": "TRANSAKSI TELAH SELESAI",
             "perlu_transaksi_lain": "PERLU TRANSAKSI YANG LAIN?",
-            "header_pembayaran": "---------------JENIS PEMBAYARAN/PEMBELIAN-----------------",
+            "header_pembayaran": "---JENIS PEMBAYARAN/PEMBELIAN---",
             "pilih_pembayaran": "1. Telepon/HP",
             "pilih_listrik": "2. Listrik/PLN",
             "pilih_air": "3. Air/PDAM",
@@ -141,7 +141,7 @@ def load_language(lang_code):
             "pulsa_lainnya": "8. LAINNYA", 
             "pilih_nominal_isi_ulang": "Pilih nominal isi ulang anda: ",
             "masukkan_nominal_lain": "Masukkan nominal pulsa lainnya: ",
-            "header_konfirmasi_pulsa": "-------------------KONFIRMASI PEMBELIAN PULSA PRABAYAR-------------------",
+            "header_konfirmasi_pulsa": "---KONFIRMASI PEMBELIAN PULSA PRABAYAR---",
             "nomor_hp_receipt": "Nomor Handphone   : {}",
             "jumlah_pulsa_receipt": "Jumlah            : {}",
             "biaya_admin_receipt": "Biaya Admin       : {}",
@@ -149,35 +149,35 @@ def load_language(lang_code):
             "proses_transaksi_tanya": "PROSES TRANSAKSI (y/n)? ",
             "transaksi_berhasil": "TRANSAKSI BERHASIL",
             "berikut_struk": "BERIKUT ADALAH STRUK ANDA",
-            "header_struk_bank": "---------------------BANK BERKOM A TEBAL----------------------",
-            "header_struk_pulsa": "-----------------PEMBELIAN PULSA PRABAYAR-----------------",
+            "header_struk_bank": "---BANK BERKOM A TEBAL---",
+            "header_struk_pulsa": "---PEMBELIAN PULSA PRABAYAR---",
             "voucher_reff_receipt": "Voucher Reff      : {}",
-            "footer_struk_1": "---------Jl. Jalan di Bandung-------",
-            "footer_struk_pulsa_1": "-----------PROVIDER BERKOM MENYATAKAN STRUK INI-----------",
-            "footer_struk_sah": "-------------SEBAGAI BUKTI PEMBAYARAN YANG SAH------------",
+            "footer_struk_1": "---Jl. Jalan di Bandung---",
+            "footer_struk_pulsa_1": "---PROVIDER BERKOM MENYATAKAN STRUK INI---",
+            "footer_struk_sah": "---SEBAGAI BUKTI PEMBAYARAN YANG SAH---",
             "prompt_input_listrik": "MASUKKAN NOMOR METER ANDA",
-            "header_konfirmasi_listrik": "---------------KONFIRMASI PEMBELIAN LISTRIK PRABAYAR---------------",
+            "header_konfirmasi_listrik": "---KONFIRMASI PEMBELIAN LISTRIK PRABAYAR---",
             "nomor_meter_receipt": "Nomor Meter       : {}",
             "idpel_receipt": "IDPEL             : {}",
             "nama_receipt": "Nama              : {}",
             "tarif_daya_receipt": "Tarif/Daya        : R1M / 900 VA",
             "pilih_nominal_token": "PILIH JUMLAH NOMINAL TOKEN",
             "admin_rp_1000": "BIAYA ADMIN RP 1.000",
-            "header_struk_listrik": "-------------STRUK PEMBELIAN LISTRIK PRABAYAR--------------",
+            "header_struk_listrik": "---STRUK PEMBELIAN LISTRIK PRABAYAR---",
             "stroom_token_receipt": "Stroom/Token      : {}",
-            "footer_struk_listrik_1": "-----------------PLN MENYATAKAN STRUK INI-----------------",
+            "footer_struk_listrik_1": "---PLN MENYATAKAN STRUK INI---",
             "prompt_input_air": "MASUKKAN KODE PERUSAHAAN DIIKUTI NOMOR PELANGGAN",
             "contoh_air": "Contoh: 4011234567890 (PAM KOTA BOGOR)",
             "lihat_kode_pdam_tanya": "Apakah anda ingin melihat daftar kode air minum/PDAM (y/n)? ",
             "daftar_kode_pdam": "DAFTAR KODE PERUSAHAAN PDAM",
             "nomor_pelanggan_input": "Masukkan kode perusahaan + nomor pelanggan: ",
-            "header_konfirmasi_air": "-------------------KONFIRMASI PEMBAYARAN AIR/PDAM-------------------",
+            "header_konfirmasi_air": "---KONFIRMASI PEMBAYARAN AIR/PDAM---",
             "tagihan_receipt": "TAGIHAN {}",
             "no_pelanggan_receipt": "No Pelanggan      : {}",
             "total_bayar_receipt": "Total Bayar       : {}",
             "lanjut_pembayaran_tanya": "Ingin Melanjutkan Pembayaran (y/n)? ",
-            "header_struk_air": "----------------STRUK PEMBAYARAN AIR/PDAM-----------------",
-            "footer_struk_air_1": "-----------------PDAM MENYATAKAN STRUK INI----------------",
+            "header_struk_air": "---STRUK PEMBAYARAN AIR/PDAM---",
+            "footer_struk_air_1": "---PDAM MENYATAKAN STRUK INI---",
             "masukkan_pin_lama": "Masukkan PIN lama anda: ",
             "masukkan_pin_baru": "Masukkan PIN baru anda (6 digit): ",
             "konfirmasi_pin_baru": "Konfirmasikan kembali PIN baru anda: ",
@@ -224,7 +224,7 @@ def load_language(lang_code):
         }
     elif lang_code == 'en':
         return {
-            "buat_akun": "Silakan buat akun jika belum memiliki akun",
+            "buat_akun": "Please make an account if you don't have an account",
             "masukkan_data_anda": "Please enter your data below!",
             "selamat_datang": "WELCOME TO BANK BERKOM A TEBAL",
             "masukkan_kartu_prompt": "Please insert your card to begin.",
@@ -273,7 +273,7 @@ def load_language(lang_code):
             "jumlah_receipt": "AMOUNT            : {}",
             "sisa_saldo_receipt": "REMAINING BALANCE : {}",
             "waktu_transaksi_receipt": "TRANSACTION TIME  : {}",
-            "header_transfer": "====================ATM TRANSFER===================",
+            "header_transfer": "===ATM TRANSFER===",
             "prompt_kode_bank_rek": "ENTER BANK CODE AND DESTINATION ACCOUNT NUMBER",
             "ket_kode_bank_rek": "3 digits bank code followed by account number",
             "contoh_transfer": "e.g. 0011234567 (For BRI)",
@@ -292,7 +292,7 @@ def load_language(lang_code):
             "data_sesuai_tanya": "Is the data correct (y/n)? ",
             "transaksi_selesai": "TRANSACTION COMPLETED",
             "perlu_transaksi_lain": "NEED ANOTHER TRANSACTION?",
-            "header_pembayaran": "----------------PAYMENT / PURCHASE TYPE-------------------",
+            "header_pembayaran": "---PAYMENT / PURCHASE TYPE---",
             "pilih_pembayaran": "1. Telephone/Mobile",
             "pilih_listrik": "2. Electricity/PLN",
             "pilih_air": "3. Water/PDAM",
@@ -302,7 +302,7 @@ def load_language(lang_code):
             "pulsa_lainnya": "8. OTHER", 
             "pilih_nominal_isi_ulang": "Select your top-up amount: ",
             "masukkan_nominal_lain": "Enter other credit amount: ",
-            "header_konfirmasi_pulsa": "-------------------PREPAID CREDIT PURCHASE CONFIRMATION-------------------",
+            "header_konfirmasi_pulsa": "---PREPAID CREDIT PURCHASE CONFIRMATION---",
             "nomor_hp_receipt": "Phone Number      : {}",
             "jumlah_pulsa_receipt": "Amount            : {}",
             "biaya_admin_receipt": "Admin Fee         : {}",
@@ -310,35 +310,35 @@ def load_language(lang_code):
             "proses_transaksi_tanya": "PROCESS TRANSACTION (y/n)? ",
             "transaksi_berhasil": "TRANSACTION SUCCESSFUL",
             "berikut_struk": "HERE IS YOUR RECEIPT",
-            "header_struk_bank": "---------------------BANK BERKOM A TEBAL----------------------",
-            "header_struk_pulsa": "-----------------PREPAID CREDIT PURCHASE-----------------",
+            "header_struk_bank": "---BANK BERKOM A TEBAL---",
+            "header_struk_pulsa": "---PREPAID CREDIT PURCHASE---",
             "voucher_reff_receipt": "Voucher Reff      : {}",
-            "footer_struk_1": "---------Jl. Jalan di Bandung-------",
-            "footer_struk_pulsa_1": "----------PROVIDER BERKOM DECLARES THIS RECEIPT-----------",
-            "footer_struk_sah": "----------------AS VALID PROOF OF PURCHASE----------------",
+            "footer_struk_1": "---Jl. Jalan di Bandung---",
+            "footer_struk_pulsa_1": "---PROVIDER BERKOM DECLARES THIS RECEIPT---",
+            "footer_struk_sah": "---AS VALID PROOF OF PURCHASE---",
             "prompt_input_listrik": "ENTER YOUR METER NUMBER",
-            "header_konfirmasi_listrik": "---------------PREPAID ELECTRICITY PURCHASE CONFIRMATION---------------",
+            "header_konfirmasi_listrik": "---PREPAID ELECTRICITY PURCHASE CONFIRMATION---",
             "nomor_meter_receipt": "Meter Number      : {}",
             "idpel_receipt": "Customer ID       : {}",
             "nama_receipt": "Name              : {}",
             "tarif_daya_receipt": "Tariff/Power      : R1M / 900 VA",
             "pilih_nominal_token": "CHOOSE TOKEN AMOUNT",
             "admin_rp_1000": "ADMIN FEE RP 1,000",
-            "header_struk_listrik": "-------------PREPAID ELECTRICITY PURCHASE RECEIPT--------------",
+            "header_struk_listrik": "---PREPAID ELECTRICITY PURCHASE RECEIPT---",
             "stroom_token_receipt": "Stroom/Token      : {}",
-            "footer_struk_listrik_1": "-----------------PLN DECLARES THIS RECEIPT----------------",
+            "footer_struk_listrik_1": "---PLN DECLARES THIS RECEIPT---",
             "prompt_input_air": "ENTER COMPANY CODE FOLLOWED BY CUSTOMER NUMBER",
             "contoh_air": "Example: 4011234567890 (PAM KOTA BOGOR)",
             "lihat_kode_pdam_tanya": "Do you wish to see the water/PDAM company codes (y/n)? ",
             "daftar_kode_pdam": "PDAM COMPANY CODES LIST",
             "nomor_pelanggan_input": "Enter company code + customer number: ",
-            "header_konfirmasi_air": "-------------------WATER/PDAM PAYMENT CONFIRMATION-------------------",
+            "header_konfirmasi_air": "---WATER/PDAM PAYMENT CONFIRMATION---",
             "tagihan_receipt": "BILL {}",
             "no_pelanggan_receipt": "Customer No.      : {}",
             "total_bayar_receipt": "Total Payment     : {}",
             "lanjut_pembayaran_tanya": "Continue Payment (y/n)? ",
-            "header_struk_air": "----------------WATER/PDAM PAYMENT RECEIPT-----------------",
-            "footer_struk_air_1": "-----------------PDAM DECLARES THIS RECEIPT----------------",
+            "header_struk_air": "---WATER/PDAM PAYMENT RECEIPT---",
+            "footer_struk_air_1": "---PDAM DECLARES THIS RECEIPT---",
             "masukkan_pin_lama": "Enter your old PIN: ",
             "masukkan_pin_baru": "Enter your new PIN (6 digits): ",
             "konfirmasi_pin_baru": "Please confirm your new PIN: ",
@@ -473,7 +473,7 @@ def create_account():
         min_saldo_awal = MIN_SALDO_AWAL_IDR if mata_uang_utama == 'IDR' else MIN_SALDO_AWAL_IDR / KURS_BELI.get(mata_uang_utama, 1)
         if saldo < min_saldo_awal:
             min_saldo_awal_str = format_currency(min_saldo_awal, mata_uang_utama)
-            return jsonify({'success': False, 'message': TERMS['saldo_awal_kurang'].format(min_saldo_awal_str)})
+            return jsonify({'success': False, 'message': TERMS['saldo_awal_kurang'].format(min_saldo_awal_str) + ' (Not enough balance! Min: Rp50.000)'})
 
         user_data = {
             'nama_lengkap': nama_lengkap,
@@ -497,7 +497,7 @@ def create_account():
 @app.route('/api/login', methods=['POST'])
 def login():
     if 'user_data' not in session:
-        return jsonify({'success': False, 'message': 'Sesi tidak ditemukan. Silakan mulai ulang.'})
+        return jsonify({'success': False, 'message': 'Sesi tidak ditemukan. Silakan mulai ulang.' + '\n\nSession not found. Please try again.'})
 
     data = request.json
     pin_masuk = data.get('pin')
@@ -541,7 +541,7 @@ def get_balance():
     if mata_uang == 'IDR':
         return jsonify({
             'success': True,
-            'message': f"{TERMS['saldo_rekening_anda']}\n{saldo_utama_str}",
+            'message': f"Saldo/Balance\n{saldo_utama_str}",
             'saldo_utama': saldo_utama_str
         })
     else:
@@ -551,7 +551,7 @@ def get_balance():
         
         return jsonify({
             'success': True,
-            'message': f"{TERMS['saldo_rekening_anda']}\n{saldo_utama_str}",
+            'message': f"Saldo/Balance\n{saldo_utama_str}",
             'saldo_utama': saldo_utama_str,
             'saldo_idr_ekuivalen': saldo_idr_str,
             'kurs_info': f"({TERMS['saldo_dalam_idr_label']}: {saldo_idr_str})"
@@ -579,7 +579,7 @@ def withdraw_idr():
         return jsonify({'success': False, 'message': TERMS['nominal_tidak_valid'].format(format_rupiah(50000), format_rupiah(50000), format_rupiah(10000000))})
 
     if saldo_sebelum < tarik_nominal:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup']})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
         
     if (saldo_sebelum - tarik_nominal) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -660,7 +660,7 @@ def withdraw_non_idr():
 
     saldo_sebelum_int = int(round(saldo_sebelum * multiplier))
     if saldo_sebelum_int < tarik_nominal_int:
-         return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup']})
+         return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
 
     user_data['saldo'] -= tarik_nominal_curr
     session['user_data'] = user_data
@@ -710,13 +710,13 @@ def transfer_idr():
     
     kode_bank = rekening_tujuan[:3]
     if kode_bank not in KUMPULAN_BANK:
-        return jsonify({'success': False, 'message': f"Kode bank {kode_bank} tidak valid."})
+        return jsonify({'success': False, 'message': f"Kode bank {kode_bank} invalid."})
     
     if nominal_transfer <= 0:
         return jsonify({'success': False, 'message': "Nominal harus positif."})
 
     if user_data['saldo'] < nominal_transfer:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup']})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
     
     if (user_data['saldo'] - nominal_transfer) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -764,7 +764,7 @@ def payment_phone():
     total_bayar = nominal_pilihan + admin_bank
 
     if user_data['saldo'] < total_bayar:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup']})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
         
     if (user_data['saldo'] - total_bayar) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -815,7 +815,7 @@ def payment_electricity():
     token = f"{random.randint(1000, 9999)} {random.randint(1000, 9999)} {random.randint(1000, 9999)} {random.randint(1000, 9999)} {random.randint(1000, 9999)}"
 
     if user_data['saldo'] < total_bayar:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup']})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
 
     if (user_data['saldo'] - total_bayar) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -861,13 +861,13 @@ def payment_water_check():
     TERMS = session['TERMS']
 
     if len(nomor_pelanggan_full) < 4 or not nomor_pelanggan_full.isdigit():
-        return jsonify({'success': False, 'message': "Format input tidak valid."})
+        return jsonify({'success': False, 'message': "Format input invalid."})
 
     kode_input = nomor_pelanggan_full[:3]
     nomor_saja = nomor_pelanggan_full[3:]
 
     if kode_input not in KODE_PERUSAHAAN_MAP:
-        return jsonify({'success': False, 'message': f"Kode perusahaan {kode_input} tidak dikenal."})
+        return jsonify({'success': False, 'message': f"Kode perusahaan {kode_input} invalid."})
 
     nama_perusahaan = KODE_PERUSAHAAN_MAP[kode_input]
     tagihan = random.randint(50000, 500000)
@@ -908,7 +908,7 @@ def payment_water_pay():
     TERMS = session['TERMS']
 
     if user_data['saldo'] < total_bayar:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup']})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
         
     if (user_data['saldo'] - total_bayar) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})

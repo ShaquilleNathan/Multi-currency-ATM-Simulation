@@ -3,31 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buat Akun - Bank Berkom A Tebal</title>
+    <title>Buat Akun/Create Account - Bank Berkom A Tebal</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #e9ecef;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: block;
             height: auto;
-            padding-top: 40px;
+            min-height: 100vh;
+            padding: 40px 20px;
             overflow: auto;
+            font-family: 'Roboto', sans-serif;
         }
         .form-container {
             max-width: 600px;
             margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
-        .form-container h1 {
-            color: #003366;
+        .form-container h1.c1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 5px;
             font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+        }
+        .form-container h1.c2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+        }
+        .form-container p.subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .form-container p.subtitle2 {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
         }
         .form-group {
             margin-bottom: 20px;
@@ -42,61 +69,115 @@
         .form-group select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             box-sizing: border-box;
             font-size: 1em;
+            font-family: 'Roboto', sans-serif;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
         }
         .form-group input[type="password"] {
             font-family: 'Orbitron', sans-serif;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-size: 1.2em;
         }
         .btn-submit {
             width: 100%;
             padding: 15px;
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1.2em;
             font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+            margin-top: 10px;
         }
         .btn-submit:hover {
-            background-color: #45a049;
+            background: linear-gradient(135deg, #7e8ef5 0%, #8b5cb8 100%);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.6);
+            transform: translateY(-2px);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(102,126,234,0.4);
         }
         #error-message {
-            color: #ff4d4d;
-            background-color: #ffeded;
-            border: 1px solid #ffb8b8;
-            padding: 10px;
-            border-radius: 5px;
+            color: #d32f2f;
+            background-color: #ffebee;
+            border: 2px solid #ef5350;
+            padding: 12px;
+            border-radius: 8px;
             margin-bottom: 20px;
             display: none;
+            font-weight: 500;
+        }
+        .input-hint {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .back-link a:hover {
+            color: #764ba2;
         }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <h1>Buat Akun Baru</h1>
+        <h1 class="c1">Buat Akun Baru </h1>
+        <h1 class="c2"><i>(Create Account)</i></h1>
+        <p class="subtitle">Silakan lengkapi data di bawah ini untuk membuat akun ATM!</p>
+        <p class="subtitle2"><i>Complete this form to make an account!</i></p>
         <p id="error-message"></p>
-        <form id="create-account-form">
+        <form id="create-account-form" autocomplete="off">
             <div class="form-group">
-                <label for="nama_lengkap">Nama Lengkap:</label>
-                <input type="text" id="nama_lengkap" name="nama_lengkap" required>
+                <label for="nama_lengkap">Nama Lengkap (Full Name):</label>
+                <input type="text" 
+                       id="nama_lengkap" 
+                       name="nama_lengkap" 
+                       autocomplete="off"
+                       required>
             </div>
             <div class="form-group">
-                <label for="tanggal_lahir">Tanggal Lahir (DD/MM/YYYY):</label>
-                <input type="text" id="tanggal_lahir" name="tanggal_lahir" placeholder="Contoh: 25/12/2000" required>
+                <label for="tanggal_lahir">Tanggal Lahir (Date of Birth):</label>
+                <input type="text" 
+                       id="tanggal_lahir" 
+                       name="tanggal_lahir" 
+                       placeholder="DD/MM/YYYY (e.g.: 25/12/2000)" 
+                       autocomplete="off"
+                       required>
             </div>
             <div class="form-group">
-                <label for="asal_negara">Asal Negara:</label>
-                <input type="text" id="asal_negara" name="asal_negara" required>
+                <label for="asal_negara">Asal Negara (Nationality):</label>
+                <input type="text" 
+                       id="asal_negara" 
+                       name="asal_negara" 
+                       autocomplete="off"
+                       autocomplete="new-password"
+                       required>
             </div>
             <div class="form-group">
-                <label for="mata_uang_utama">Mata Uang Utama:</label>
-                <select id="mata_uang_utama" name="mata_uang_utama">
+                <label for="mata_uang_utama">Mata Uang Utama (Main Currency):</label>
+                <select id="mata_uang_utama" name="mata_uang_utama" autocomplete="off">
                     <option value="IDR" selected>IDR (Rupiah)</option>
                     <option value="USD">USD (US Dollar)</option>
                     <option value="GBP">GBP (Pound Sterling)</option>
@@ -108,22 +189,73 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="pin">Buat PIN (6 Digit Angka):</label>
-                <input type="password" id="pin" name="pin" maxlength="6" pattern="\d{6}" required>
+                <label for="pin">Buat PIN / Make a PIN (6 Digit):</label>
+                <input type="password" 
+                       id="pin" 
+                       name="pin" 
+                       maxlength="6" 
+                       pattern="\d{6}" 
+                       autocomplete="new-password"
+                       readonly
+                       onfocus="this.removeAttribute('readonly');"
+                       required>
+                <div class="input-hint">PIN harus terdiri dari 6 angka</div>
+                <div class="input-hint"><i>PIN must be 6 digits</i></div>
             </div>
             <div class="form-group">
-                <label for="pin_konfirmasi">Konfirmasi PIN:</label>
-                <input type="password" id="pin_konfirmasi" name="pin_konfirmasi" maxlength="6" required>
+                <label for="pin_konfirmasi">Konfirmasi PIN (PIN Confirmation):</label>
+                <input type="password" 
+                       id="pin_konfirmasi" 
+                       name="pin_konfirmasi" 
+                       maxlength="6" 
+                       autocomplete="new-password"
+                       readonly
+                       onfocus="this.removeAttribute('readonly');"
+                       required>
             </div>
             <div class="form-group">
-                <label for="saldo">Saldo Awal:</label>
-                <input type="number" id="saldo" name="saldo" min="0" step="0.01" required>
+                <label for="saldo">Saldo Awal (Balance):</label>
+                <input type="number" 
+                       id="saldo" 
+                       name="saldo" 
+                       min="0" 
+                       step="0.01" 
+                       autocomplete="off"
+                       placeholder="Masukkan saldo awal minimal Rp50.000"
+                       required>
+                <div class="input-hint">Minimal Rp50.000 untuk IDR</div>
+                <div class="input-hint"><i>Minimal Rp50.000 in IDR</i></div>
             </div>
-            <button type="submit" class="btn-submit">Buat Akun</button>
+            <button type="submit" class="btn-submit">Buat Akun <i>(Create Account)</i></button>
         </form>
+        <div class="back-link">
+            <a href="/">← Kembali ke ATM (Back to ATM)</a>
+        </div>
     </div>
 
     <script>
+        // Prevent autofill on page load
+        window.addEventListener('load', function() {
+            // Clear all form fields on page load
+            document.getElementById('create-account-form').reset();
+            
+            // Additional clearing for stubborn browsers
+            setTimeout(function() {
+                document.querySelectorAll('input').forEach(input => {
+                    if (input.type !== 'submit') {
+                        input.value = '';
+                    }
+                });
+            }, 100);
+        });
+
+        // Prevent browser autofill
+        document.getElementById('create-account-form').addEventListener('focus', function(e) {
+            if (e.target.tagName === 'INPUT') {
+                e.target.setAttribute('autocomplete', 'off');
+            }
+        }, true);
+
         document.getElementById('create-account-form').addEventListener('submit', async function(e) {
             e.preventDefault(); 
 
@@ -132,6 +264,19 @@
 
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
+
+            // Validation for PIN
+            if (data.pin.length !== 6 || !/^\d{6}$/.test(data.pin)) {
+                errorMessage.textContent = 'PIN harus terdiri dari 6 digit angka (PIN must be 6 digits)';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (data.pin !== data.pin_konfirmasi) {
+                errorMessage.textContent = 'PIN dan konfirmasi PIN tidak cocok (PIN \did\'nt match!)';
+                errorMessage.style.display = 'block';
+                return;
+            }
 
             try {
                 const response = await fetch('/api/create_account', {
@@ -145,15 +290,17 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    alert('Akun berhasil dibuat! Anda akan dialihkan kembali ke ATM untuk login.');
+                    alert('✅ Akun berhasil dibuat!\n\nAnda akan dialihkan ke ATM untuk login dengan PIN yang telah dibuat.' + '\n\n✅ Account successfully created!');
                     window.location.href = '/'; 
                 } else {
                     errorMessage.textContent = result.message;
                     errorMessage.style.display = 'block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             } catch (err) {
-                errorMessage.textContent = 'Terjadi kesalahan jaringan. Silakan coba lagi.';
+                errorMessage.textContent = '❌ Terjadi kesalahan jaringan. Silakan coba lagi.' + '\n\n Account creation failed. Please try again later.';
                 errorMessage.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
     </script>

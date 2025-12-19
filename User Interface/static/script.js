@@ -17,12 +17,45 @@ document.addEventListener('DOMContentLoaded', () => {
     let appConfig = {};
     let typingTimer;
     let tempStorage = {};
+    let currentWithdrawalAmount = 0;
+
+    const sounds = {
+        cardInsert: new Audio('/static/sounds/card-insert.mp3'),
+        cardEject: new Audio('/static/sounds/card-eject.mp3'),
+        buttonBeep: new Audio('/static/sounds/button-beep.mp3'),
+        buttonClick: new Audio('/static/sounds/button-click.mp3'),
+        success: new Audio('/static/sounds/success.mp3'),
+        error: new Audio('/static/sounds/error.mp3'),
+        cashDispense: new Audio('/static/sounds/cash-dispense.mp3'),
+        processing: new Audio('/static/sounds/processing.mp3'),
+        receiptPrint: new Audio('/static/sounds/receipt-print.mp3')
+    };
+
+    Object.values(sounds).forEach(sound => {
+        sound.volume = 0.5; 
+    });
+
+    function playSound(soundName) {
+        const sound = sounds[soundName];
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(err => console.log('Sound play failed:', err));
+        }
+    }
 
     const RANDOM_NAMES = [
         'Budi Setiawan', 'Siti Aminah', 'Agus Wijaya', 'Dewi Lestari',
         'Eko Prasetyo', 'Rina Marlina', 'Joko Susilo', 'Fitri Handayani',
         'Andi Pratama', 'Putri Ayu'
     ];
+
+    function roundToStep(value, step) {
+        const multiplier = 1000000; 
+        const valueInt = Math.round(value * multiplier);
+        const stepInt = Math.round(step * multiplier);
+        const roundedInt = Math.round(valueInt / stepInt) * stepInt;
+        return roundedInt / multiplier;
+}
 
     function showLoading(show) {
         if (show) {
@@ -34,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function apiCall(endpoint, method = 'GET', body = null) {
         showLoading(true);
+        playSound('processing');
         try {
             const options = {
                 method: method,
@@ -120,7 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sideButtonOptions[id]) {
                 const btn = document.getElementById(`btn-${id}`);
                 btn.textContent = sideButtonOptions[id].text;
-                btn.onclick = sideButtonOptions[id].action;
+                btn.onclick = () => {
+                    playSound('buttonClick'); 
+                    sideButtonOptions[id].action();
+                };
                 btn.style.visibility = 'visible';
             }
         });
@@ -129,7 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sideButtonOptions[id]) {
                 const btn = document.getElementById(`btn-${id}`);
                 btn.textContent = sideButtonOptions[id].text;
-                btn.onclick = sideButtonOptions[id].action;
+                btn.onclick = () => {
+                    playSound('buttonClick'); 
+                    sideButtonOptions[id].action();
+                };
                 btn.style.visibility = 'visible';
             }
         });
@@ -156,16 +196,65 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${kode_mata_uang} ${new Intl.NumberFormat('en-US', options).format(angka)}`;
     }
 
-
     function showReceipt(receiptText, nextState) {
-        const receiptContent = `${currentTerms['transaksi_berhasil']}\n${currentTerms['berikut_struk']}\n\n${receiptText}`;
+        sideButtons.forEach(btn => {
+            btn.textContent = '';
+            btn.onclick = null;
+            btn.style.visibility = 'hidden';
+        });
+        
+        const successMsg = currentTerms['transaksi_berhasil'] + '\n\n' + 
+                        'Struk sedang dicetak...\n' +
+                        'Receipt is being printed...\n\n' +
+                        'Silakan ambil struk Anda\n' +
+                        'Please take your receipt';
+        
+        typingEffect(successMsg, () => {
+            printReceipt(receiptText);
 
-        showScreen(receiptContent, {
-            r4: { text: 'LANJUT', action: () => handleStateChange(nextState) }
+            setTimeout(() => {
+                const btn = document.getElementById('btn-r4');
+                btn.textContent = 'AMBIL\n/ TAKE';
+                btn.onclick = () => {
+                    playSound('buttonClick');
+                    collectReceipt();
+                    setTimeout(() => {
+                        handleStateChange(nextState);
+                    }, 1000);
+                };
+                btn.style.visibility = 'visible';
+            }, 2500);
+        });
+    }
+
+    function printReceipt(receiptText) {
+        const receiptContainer = document.getElementById('receipt-container');
+        const receiptContent = typeof receiptText === 'string' ? receiptText : receiptText.join('\n');
+        receiptContainer.innerHTML = '';
+        const receiptPaper = document.createElement('div');
+        receiptPaper.className = 'receipt-paper';
+        receiptPaper.textContent = receiptContent;
+        receiptContainer.appendChild(receiptPaper);
+        setTimeout(() => {
+            playSound('receiptPrint');
+            receiptPaper.classList.add('printing');
+        }, 500);
+    }
+
+    function collectReceipt() {
+        const receiptPapers = document.querySelectorAll('.receipt-paper');
+        receiptPapers.forEach((paper, index) => {
+            setTimeout(() => {
+                paper.classList.add('collected');
+                setTimeout(() => {
+                    paper.remove();
+                }, 1500);
+            }, index * 100);
         });
     }
 
     function animateCardIn() {
+        playSound('cardInsert');
         cardElement.classList.remove('ejected');
         cardElement.classList.add('inserted');
         setTimeout(() => {
@@ -174,6 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function animateCardOut() {
+        playSound('cardEject');
         cardElement.classList.remove('inserted');
         cardElement.classList.add('ejected');
         setTimeout(() => {
@@ -184,6 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleKeypadInput(key) {
         if (appState === 'INIT') {
             if (key === 'enter') {
+                playSound('buttonBeep');
                 handleStateChange('CARD_INSERTING');
             }
             return;
@@ -191,17 +282,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         switch (key) {
             case 'enter':
+                playSound('buttonBeep');
                 processEnterKey();
                 break;
             case 'cancel':
+                playSound('buttonBeep');
                 processCancelKey();
                 break;
             case 'clear':
+                playSound('buttonBeep');
                 inputBuffer = '';
                 updateInputDisplay();
                 break;
             default: // Angka 0-9 atau .
                 if (inputContainer.style.display === 'flex') {
+                    playSound('buttonBeep');
                     const isPinInput = appState === 'PIN_LOGIN' ||
                                        appState === 'CHANGE_PIN_OLD' ||
                                        appState === 'CHANGE_PIN_NEW' ||
@@ -332,6 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             hideInput();
             if (data.success) {
+                playSound('success');
                 currentUserData = data.user_data;
                 showScreen(data.message, {}, () => {
                     if (currentUserData.mata_uang_utama === 'IDR') {
@@ -341,6 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             } else {
+                playSound('error')
                 if (data.blocked) {
                     showScreen(data.message, {}, () => {
                         setTimeout(handleStateChange, 3000, 'CARD_EJECTING');
@@ -358,15 +455,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await apiCall('/api/get_balance');
         if(data && data.success) {
             let text = data.message;
+            const lang = currentUserData.bahasa || 'id';
+            const backButtonText = lang === 'id' ? 'KEMBALI / BACK' : 'KEMBALI / BACK';
+
             let options = {
-                r4: { text: currentTerms['opsi_tidak'], action: () => handleStateChange(currentUserData.mata_uang_utama === 'IDR' ? 'MAIN_MENU_IDR' : 'MAIN_MENU_NON_IDR') }
+                r4: { text: backButtonText, action: () => handleStateChange(currentUserData.mata_uang_utama === 'IDR' ? 'MAIN_MENU_IDR' : 'MAIN_MENU_NON_IDR') }
             };
 
             if (data.saldo_idr_ekuivalen) {
+                const yesButtonText = lang === 'id' ? 'YA / YES' : 'YA / YES';
                 text += `\n\n${currentTerms['saldo_dalam_idr_tanya']}`;
-                options.r1 = { text: currentTerms['opsi_ya'], action: () => {
+                options.r1 = { text: yesButtonText, action: () => {
                     showScreen(`${currentTerms['saldo_rekening_anda']}\n${data.saldo_utama}\n\n${currentTerms['saldo_dalam_idr_label']}:\n${data.saldo_idr_ekuivalen}`, {
-                       r4: { text: 'KEMBALI', action: () => handleStateChange('MAIN_MENU_NON_IDR') }
+                    r4: { text: backButtonText, action: () => handleStateChange('MAIN_MENU_NON_IDR') }
                     });
                 }};
             }
@@ -379,11 +480,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             hideInput();
             if (data.success) {
-                showScreen(data.message + `\n\n${currentTerms['cetak_receipt_tanya']}`, {
-                    r1: { text: currentTerms['opsi_ya'], action: () => showReceipt(data.receipt, 'ASK_CONTINUE') },
-                    r2: { text: currentTerms['opsi_tidak'], action: () => handleStateChange('ASK_CONTINUE') }
-                });
+                const balanceStr = data.new_balance;          
+                const cleanBalance = balanceStr
+                    .replace('Rp', '')                         
+                    .replace(/\./g, '')                        
+                    .trim();                                   
+                currentUserData.saldo = parseFloat(cleanBalance);
+                if (amount % 50000 === 0 && amount % 100000 !== 0) {
+                dispenseCash('50k', amount);
+            } else if (amount % 100000 === 0) {
+                showDenominationChoice(amount);
             } else {
+                showScreen('Jumlah penarikan tidak valid / Invalid withdrawal amount', {}, () => {
+                    setTimeout(handleStateChange, 2000, 'WITHDRAW_IDR_MENU');
+                });
+            }
+            } else {
+                playSound('error');
                 showScreen(data.message, {}, () => {
                     setTimeout(handleStateChange, 3000, 'WITHDRAW_IDR_MENU');
                 });
@@ -391,28 +504,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function doWithdrawNonIDR(amount_curr) { 
-        console.log("[DEBUG] doWithdrawNonIDR received (original):", amount_curr, typeof amount_curr);
-
+    async function doWithdrawNonIDR(amount_curr) {
         const data = await apiCall('/api/withdraw/non_idr', 'POST', { amount: amount_curr });
-
         if (data) {
             hideInput();
             if (data.success) {
-                showScreen(data.message + `\n\n${currentTerms['cetak_receipt_tanya']}`, {
-                    r1: { text: currentTerms['opsi_ya'], action: () => showReceipt(data.receipt, 'ASK_CONTINUE') },
-                    r2: { text: currentTerms['opsi_tidak'], action: () => handleStateChange('ASK_CONTINUE') }
-                });
+                const ccyCode = currentUserData.mata_uang_utama;
+                const balanceStr = data.new_balance;
+                const balanceNum = parseFloat(balanceStr.replace(/[^\d.-]/g, ''));
+                currentUserData.saldo = balanceNum;
+                const kurs = appConfig.kurs_beli[currentUserData.mata_uang_utama];
+                const amountIDR = Math.floor(amount_curr * kurs);
+                const roundedTo50k = Math.round(amountIDR / 50000) * 50000;
+                const roundedTo100k = Math.round(amountIDR / 100000) * 100000;
+                const tolerance = amountIDR * 0.01;
+                const isClose50k = Math.abs(amountIDR - roundedTo50k) <= tolerance;
+                const isClose100k = Math.abs(amountIDR - roundedTo100k) <= tolerance;
+                
+                if (isClose100k) {
+                        showDenominationChoice(amountIDR);
+                    
+                } else if (isClose50k) {
+                        dispenseCash('50k', roundedTo50k); 
+                }else {
+                    showScreen('Jumlah penarikan tidak valid / Invalid withdrawal amount', {}, () => {
+                        setTimeout(handleStateChange, 2000, 'WITHDRAW_NON_IDR_MENU');
+                    });
+                }
             } else {
-                 if (data.message === currentTerms['masukkan_angka_valid']) {
-                     showScreen(data.message, {}, () => {
-                         setTimeout(handleStateChange, 2000, 'WITHDRAW_NON_IDR_OTHER');
-                     });
-                 } else {
-                     showScreen(data.message, {}, () => {
-                         setTimeout(handleStateChange, 3000, 'WITHDRAW_NON_IDR_MENU');
-                     });
-                 }
+                playSound('error');
+                if (data.message === currentTerms['masukkan_angka_valid']) {
+                    showScreen(data.message, {}, () => {
+                        setTimeout(handleStateChange, 2000, 'WITHDRAW_NON_IDR_OTHER');
+                    });
+                } else {
+                    showScreen(data.message, {}, () => {
+                        setTimeout(handleStateChange, 3000, 'WITHDRAW_NON_IDR_MENU');
+                    });
+                }
             }
         }
     }
@@ -428,8 +557,10 @@ document.addEventListener('DOMContentLoaded', () => {
             hideInput();
             tempStorage = {};
             if (data.success) {
+                playSound('success');
                 showReceipt(data.receipt, 'ASK_CONTINUE');
             } else {
+                playSound('error');
                 showScreen(data.message, {}, () => {
                     setTimeout(handleStateChange, 3000, 'MAIN_MENU_IDR');
                 });
@@ -446,8 +577,10 @@ document.addEventListener('DOMContentLoaded', () => {
             hideInput();
             tempStorage = {};
             if (data.success) {
+                playSound('success');
                 showReceipt(data.receipt, 'ASK_CONTINUE');
             } else {
+                playSound('error');
                 showScreen(data.message, {}, () => {
                     setTimeout(handleStateChange, 3000, 'PAYMENT_MENU');
                 });
@@ -464,8 +597,10 @@ document.addEventListener('DOMContentLoaded', () => {
             hideInput();
             tempStorage = {};
             if (data.success) {
+                playSound('success');
                 showReceipt(data.receipt, 'ASK_CONTINUE');
             } else {
+                playSound('error');
                 showScreen(data.message, {}, () => {
                     setTimeout(handleStateChange, 3000, 'PAYMENT_MENU');
                 });
@@ -477,6 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             hideInput();
             if (data.success) {
+                playSound('success');
                 tempStorage.waterData = data.data;
                 const confirmText = [
                     currentTerms['header_konfirmasi_air'],
@@ -506,6 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data) {
             tempStorage = {};
             if (data.success) {
+                playSound('success');
                 showReceipt(data.receipt, 'ASK_CONTINUE');
             } else {
                 showScreen(data.message, {}, () => {
@@ -550,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderCurrentState() {
         switch (appState) {
             case 'INIT':
-                showScreen(currentTerms['selamat_datang'] + '\n' + currentTerms['masukkan_kartu_prompt'] + '\n\n' + currentTerms['tekan_enter_kartu']);
+                showScreen(currentTerms['selamat_datang'] + '\n' + currentTerms['masukkan_kartu_prompt'] + '\n' + currentTerms['tekan_enter_kartu'] + '\n\n//' + '\nWelcome to Bank Berkom A Tebal' + '\nInsert your card to start' + '\nPress Enter to insert card');
                 break;
 
             case 'CARD_INSERTING':
@@ -560,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case 'WELCOME':
                 showLoading(false);
-                showScreen(currentTerms['kartu_berhasil'] + '\n\n' + currentTerms['pilih_bahasa_atm'] + '\n\n' + currentTerms['buat_akun'], {
+                showScreen(currentTerms['kartu_berhasil'] + '\n' + currentTerms['pilih_bahasa_atm'] + '\n' + '*' + currentTerms['buat_akun'] + '\n\n//' + '\nInsert card successful!' + '\nChoose your preferred language' + '\n*Select \'Buat Akun\' if you don`t have an account', {
                     r1: { text: 'INDONESIA', action: () => setLanguage('id') },
                     r2: { text: 'ENGLISH', action: () => setLanguage('en') },
                     l4: { text: 'BUAT AKUN >', action: () => {
@@ -613,24 +750,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 setupInput(currentTerms['jumlah_penarikan_input'], false);
                 break;
 
-            case 'WITHDRAW_NON_IDR_MENU':
+            case 'WITHDRAW_NON_IDR_MENU': {
                 const kurs = appConfig.kurs_beli;
                 const ccy = currentUserData.mata_uang_utama;
+                const ccyData = appConfig.currency_data[ccy]; 
+                const stepValue = ccyData.step_curr_lain;
+                
                 const preset_idr = [50000, 100000, 500000, 1000000];
-                const preset_curr = preset_idr.map(idr => idr / kurs[ccy]);
+                
+                const preset_curr = preset_idr.map(idr => {
+                    const raw = idr / kurs[ccy];
+                    return roundToStep(raw, stepValue);
+                });
+
+                console.log('[DEBUG] Preset values for', ccy, ':', preset_curr);
 
                 showScreen(`${currentTerms['penarikan_non_idr_header'].replace('{}', ccy)}\n${currentTerms['penarikan_non_idr_prompt']}`, {
-                    l1: { text: `${formatCurrencyJS(preset_idr[0], 'IDR')}\n(${formatCurrencyJS(preset_curr[0], ccy)})`,
-                          action: () => doWithdrawNonIDR(preset_curr[0]) }, // Kirim number
-                    l2: { text: `${formatCurrencyJS(preset_idr[1], 'IDR')}\n(${formatCurrencyJS(preset_curr[1], ccy)})`,
-                          action: () => doWithdrawNonIDR(preset_curr[1]) }, // Kirim number
-                    r1: { text: `${formatCurrencyJS(preset_idr[2], 'IDR')}\n(${formatCurrencyJS(preset_curr[2], ccy)})`,
-                          action: () => doWithdrawNonIDR(preset_curr[2]) }, // Kirim number
-                    r2: { text: `${formatCurrencyJS(preset_idr[3], 'IDR')}\n(${formatCurrencyJS(preset_curr[3], ccy)})`,
-                          action: () => doWithdrawNonIDR(preset_curr[3]) }, // Kirim number
-                    r3: { text: currentTerms['penarikan_non_idr_lainnya'].replace('{}', ccy), action: () => handleStateChange('WITHDRAW_NON_IDR_OTHER') }
+                    l1: { 
+                        text: `${formatCurrencyJS(preset_idr[0], 'IDR')}\n(${formatCurrencyJS(preset_curr[0], ccy)})`,
+                        action: () => {
+                            console.log('[DEBUG] Withdrawing:', preset_curr[0], 'type:', typeof preset_curr[0]);
+                            doWithdrawNonIDR(preset_curr[0]);
+                        }
+                    },
+                    l2: { 
+                        text: `${formatCurrencyJS(preset_idr[1], 'IDR')}\n(${formatCurrencyJS(preset_curr[1], ccy)})`,
+                        action: () => {
+                            console.log('[DEBUG] Withdrawing:', preset_curr[1], 'type:', typeof preset_curr[1]);
+                            doWithdrawNonIDR(preset_curr[1]);
+                        }
+                    },
+                    r1: { 
+                        text: `${formatCurrencyJS(preset_idr[2], 'IDR')}\n(${formatCurrencyJS(preset_curr[2], ccy)})`,
+                        action: () => {
+                            console.log('[DEBUG] Withdrawing:', preset_curr[2], 'type:', typeof preset_curr[2]);
+                            doWithdrawNonIDR(preset_curr[2]);
+                        }
+                    },
+                    r2: { 
+                        text: `${formatCurrencyJS(preset_idr[3], 'IDR')}\n(${formatCurrencyJS(preset_curr[3], ccy)})`,
+                        action: () => {
+                            console.log('[DEBUG] Withdrawing:', preset_curr[3], 'type:', typeof preset_curr[3]);
+                            doWithdrawNonIDR(preset_curr[3]);
+                        }
+                    },
+                    r3: { 
+                        text: currentTerms['penarikan_non_idr_lainnya'].replace('{}', ccy), 
+                        action: () => handleStateChange('WITHDRAW_NON_IDR_OTHER') 
+                    }
                 });
                 break;
+            }
+
             case 'WITHDRAW_NON_IDR_OTHER':
                 document.querySelector('.keypad-btn[data-key="."]').disabled = false;
                 const ccy_data = appConfig.currency_data[currentUserData.mata_uang_utama];
@@ -659,7 +830,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     codesText += `${code}: ${banks[code]}\n`;
                 }
                 showScreen(codesText, {
-                    r4: { text: 'LANJUT', action: () => handleStateChange('TRANSFER_IDR_REK') }
+                    r4: { text: 'LANJUT\n/ CONTINUE', action: () => handleStateChange('TRANSFER_IDR_REK') }
                 });
                 break;
             case 'TRANSFER_IDR_REK':
@@ -691,10 +862,10 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'PAYMENT_MENU':
                 tempStorage = {};
                 showScreen(currentTerms['header_pembayaran'], {
-                    l1: { text: currentTerms['pilih_pembayaran'], action: () => handleStateChange('PAYMENT_PHONE_INPUT') },
-                    l2: { text: currentTerms['pilih_listrik'], action: () => handleStateChange('PAYMENT_ELECTRICITY_INPUT') },
-                    l3: { text: currentTerms['pilih_air'], action: () => handleStateChange('PAYMENT_WATER_START') },
-                    r4: { text: 'KEMBALI', action: () => handleStateChange('MAIN_MENU_IDR') }
+                    l1: { text: 'Phone\n/ Mobile', action: () => handleStateChange('PAYMENT_PHONE_INPUT') },
+                    l2: { text: 'Electricity\n/ PLN', action: () => handleStateChange('PAYMENT_ELECTRICITY_INPUT') },
+                    l3: { text: 'Water\n/ PDAM', action: () => handleStateChange('PAYMENT_WATER_START') },
+                    r4: { text: 'KEMBALI / BACK', action: () => handleStateChange('MAIN_MENU_IDR') }
                 });
                 break;
             case 'PAYMENT_PHONE_INPUT':
@@ -783,7 +954,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     pdamCodesText += `${code}: ${pdam_codes[code]}\n`;
                 }
                 showScreen(pdamCodesText, {
-                    r4: { text: 'LANJUT', action: () => handleStateChange('PAYMENT_WATER_INPUT') }
+                    r4: { text: 'LANJUT\n/ CONTINUE', action: () => handleStateChange('PAYMENT_WATER_INPUT') }
                 });
                 break;
             case 'PAYMENT_WATER_INPUT':
@@ -815,6 +986,130 @@ document.addEventListener('DOMContentLoaded', () => {
                 animateCardOut();
                 break;
         }
+    }
+
+    function showDenominationChoice(amount) {
+        currentWithdrawalAmount = amount;
+        const amountStr = formatCurrencyJS(amount, 'IDR');
+
+        const choiceText = `PILIH PECAHAN / SELECT DENOMINATIONS: \nRp50.000 or Rp100.000`
+        
+        const btn50Text = 'Rp50.000\n';
+        const btn100Text = 'Rp100.000\n';
+
+        const successMessage = currentTerms['penarikan_berhasil'].replace('{}', amountStr);
+        
+        showScreen(
+            successMessage + '\n\n' + choiceText,
+            {
+                l1: { 
+                    text: btn50Text, 
+                    action: () => dispenseCash('50k', amount) 
+                },
+                l2: { 
+                    text: btn100Text, 
+                    action: () => dispenseCash('100k', amount) 
+                }
+            }
+        );
+    }
+
+    function dispenseCash(denomination, totalAmount) {
+        sideButtons.forEach(btn => {
+            btn.style.visibility = 'hidden';
+        });
+
+        const noteValue = denomination === '50k' ? 50000 : 100000;
+        const noteCount = Math.floor(totalAmount / noteValue);
+        const valueStr = formatCurrencyJS(noteValue, 'IDR');
+
+        showScreen(
+            `${currentTerms['harap_menunggu']}\n\n` +
+            `Sedang mengeluarkan ${noteCount} lembar /\nDispensing notes of ${noteCount} sheets \n` +
+            `${valueStr}...`
+        );
+
+        const cashNotesContainer = document.getElementById('cash-notes-container');
+
+        setTimeout(() => {
+            playSound('cashDispense');
+            for (let i = 0; i < noteCount; i++) {
+                setTimeout(() => {
+                    const cashNote = document.createElement('div');
+                    cashNote.className = `cash-note ${denomination === '50k' ? 'blue-50k' : 'red-100k'}`;
+                    cashNote.setAttribute('data-value', valueStr);
+                    cashNote.style.bottom = `${-80 - (i * 5)}px`;
+                    cashNote.style.zIndex = noteCount - i;
+                    cashNotesContainer.appendChild(cashNote);
+
+                    setTimeout(() => {
+                        cashNote.classList.add('dispensing');
+                    }, 50);
+                }, i * 400);
+            }
+
+            setTimeout(() => {
+                const ccyCode = currentUserData.mata_uang_utama;
+                const saldoTerkini = formatCurrencyJS(currentUserData.saldo, ccyCode);
+                showScreen(
+                    `${currentTerms['transaksi_berhasil']}\n\n` +
+                    `Silakan ambil uang Anda / Please take your money\n` +
+                    `Total: ${formatCurrencyJS(totalAmount, 'IDR')}\n` +
+                    `Pecahan/Denominations: ${noteCount} lembar (sheets) ${valueStr}\n\n` +
+                    `${currentTerms['sisa_saldo_anda'].replace('{}', saldoTerkini)}\n\n` +
+                    `${currentTerms['cetak_receipt_tanya']}`,
+                    {
+                        r1: { 
+                            text: currentTerms['opsi_ya'], 
+                            action: () => {
+                                collectCash();
+                                generateAndShowReceipt(totalAmount, denomination);
+                            }
+                        },
+                        r2: { 
+                            text: currentTerms['opsi_tidak'], 
+                            action: () => {
+                                collectCash();
+                                handleStateChange('ASK_CONTINUE');
+                            }
+                        }
+                    }
+                );
+            }, noteCount * 400 + 1500);
+        }, 1000);
+    }
+
+    function collectCash() {
+        const cashNotes = document.querySelectorAll('.cash-note');
+        cashNotes.forEach((note, index) => {
+            setTimeout(() => {
+                note.classList.add('collected');
+                setTimeout(() => {
+                    note.remove();
+                }, 800);
+            }, index * 100);
+        });
+    }
+
+    function generateAndShowReceipt(amount, denomination) {
+        const waktu = new Date().toISOString().split('T').join(' ').split('.')[0];
+        const noteValue = denomination === '50k' ? 50000 : 100000;
+        const noteCount = Math.floor(amount / noteValue);
+        const valueStr = formatCurrencyJS(noteValue, 'IDR');
+        const ccyCode = currentUserData.mata_uang_utama;
+        const saldoTerkini = formatCurrencyJS(currentUserData.saldo, ccyCode);
+        
+        const struk = [
+            '---------------------------------------------------',
+            currentTerms['header_receipt_tarik'],
+            currentTerms['jumlah_receipt'].replace('{}', formatCurrencyJS(amount, 'IDR')),
+            `Pecahan/Denominations     : ${noteCount} lembar (sheets) ${valueStr}`,
+            currentTerms['sisa_saldo_receipt'].replace('{}', saldoTerkini),
+            currentTerms['waktu_transaksi_receipt'].replace('{}', waktu),
+            '---------------------------------------------------'
+        ].join('\n');
+
+        showReceipt(struk, 'ASK_CONTINUE');
     }
 
     initializeApp();
