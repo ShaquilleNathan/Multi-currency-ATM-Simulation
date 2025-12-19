@@ -511,7 +511,7 @@ def login():
         user_data['percobaan_pin'] = 0
         session['user_data'] = user_data
         session.modified = True
-        return jsonify({'success': True, 'message': TERMS['anda_berhasil_masuk'], 'user_data': user_data})
+        return jsonify({'success': True, 'message': TERMS['anda_berhasil_masuk'] + '\n\nLogin Successful!', 'user_data': user_data})
     else:
         user_data['percobaan_pin'] += 1
         sisa_percobaan = MAKS_PERCOBAAN_PIN - user_data['percobaan_pin']
@@ -579,7 +579,7 @@ def withdraw_idr():
         return jsonify({'success': False, 'message': TERMS['nominal_tidak_valid'].format(format_rupiah(50000), format_rupiah(50000), format_rupiah(10000000))})
 
     if saldo_sebelum < tarik_nominal:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\nNot enough balance!'})
         
     if (saldo_sebelum - tarik_nominal) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -660,7 +660,7 @@ def withdraw_non_idr():
 
     saldo_sebelum_int = int(round(saldo_sebelum * multiplier))
     if saldo_sebelum_int < tarik_nominal_int:
-         return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
+         return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\nNot enough balance!'})
 
     user_data['saldo'] -= tarik_nominal_curr
     session['user_data'] = user_data
@@ -716,7 +716,7 @@ def transfer_idr():
         return jsonify({'success': False, 'message': "Nominal harus positif."})
 
     if user_data['saldo'] < nominal_transfer:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\nNot enough balance!'})
     
     if (user_data['saldo'] - nominal_transfer) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -764,7 +764,7 @@ def payment_phone():
     total_bayar = nominal_pilihan + admin_bank
 
     if user_data['saldo'] < total_bayar:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\nNot enough balance!'})
         
     if (user_data['saldo'] - total_bayar) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -815,7 +815,7 @@ def payment_electricity():
     token = f"{random.randint(1000, 9999)} {random.randint(1000, 9999)} {random.randint(1000, 9999)} {random.randint(1000, 9999)} {random.randint(1000, 9999)}"
 
     if user_data['saldo'] < total_bayar:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\nNot enough balance!'})
 
     if (user_data['saldo'] - total_bayar) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -908,7 +908,7 @@ def payment_water_pay():
     TERMS = session['TERMS']
 
     if user_data['saldo'] < total_bayar:
-        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\n Not enough balance!'})
+        return jsonify({'success': False, 'message': TERMS['saldo_tidak_cukup'] + '\n\nNot enough balance!'})
         
     if (user_data['saldo'] - total_bayar) < MIN_SISA_SALDO_IDR:
         return jsonify({'success': False, 'message': TERMS['sisa_saldo_min_tidak_cukup'].format(format_rupiah(MIN_SISA_SALDO_IDR))})
@@ -967,8 +967,7 @@ def change_pin():
     session['user_data'] = user_data
     session.modified = True
     
-    return jsonify({'success': True, 'message': TERMS['pin_berhasil_diubah']})
-
+    return jsonify({'success': True, 'message': TERMS['pin_berhasil_diubah'] + '\n\nPIN changed successfully!'})
 
 if __name__ == "__main__":
     app.run(debug=True)
