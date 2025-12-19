@@ -519,12 +519,12 @@ def login():
         session.modified = True
 
         if sisa_percobaan > 0:
-            return jsonify({'success': False, 'message': TERMS['pin_salah_sisa'].format(sisa_percobaan)})
+            return jsonify({'success': False, 'message': TERMS['pin_salah_sisa'].format(sisa_percobaan) + '\nWrong PIN entered. Please try again.'})
         else:
             user_data['diblokir'] = True
             session['user_data'] = user_data
             session.modified = True
-            return jsonify({'success': False, 'blocked': True, 'message': TERMS['akun_dikunci'] + "\n" + TERMS['kartu_diblokir']})
+            return jsonify({'success': False, 'blocked': True, 'message': TERMS['akun_dikunci'] + '\nYour account has been locked due to too many incorrect PIN attempts.' + "\n\n" + TERMS['kartu_diblokir'] + '\nCard blocked.'}) 
 
 @app.route('/api/get_balance')
 def get_balance():
@@ -590,12 +590,12 @@ def withdraw_idr():
 
     waktu = datetime.now().isoformat(' ', 'seconds')
     struk = [
-        '---------------------------------------------------',
+        '-------------------------------------------',
         TERMS['header_receipt_tarik'],
         TERMS['jumlah_receipt'].format(format_rupiah(tarik_nominal)),
         TERMS['sisa_saldo_receipt'].format(format_rupiah(user_data['saldo'])),
         TERMS['waktu_transaksi_receipt'].format(waktu),
-        '---------------------------------------------------'
+        '-------------------------------------------'
     ]
 
     return jsonify({
@@ -670,7 +670,7 @@ def withdraw_non_idr():
     waktu = datetime.now().isoformat(' ', 'seconds')
 
     struk = [
-        '---------------------------------------------------',
+        '-------------------------------------------',
         TERMS['header_receipt_tarik'] + f" ({mata_uang_akun})",
         TERMS['jumlah_receipt_non_idr'].replace( 
             '{}', format_currency(tarik_nominal_curr, mata_uang_akun), 1
@@ -679,7 +679,7 @@ def withdraw_non_idr():
         ),
         TERMS['sisa_saldo_receipt'].replace('{}', format_currency(user_data['saldo'], mata_uang_akun)),
         TERMS['waktu_transaksi_receipt'].replace('{}', waktu),
-        '---------------------------------------------------'
+        '-------------------------------------------'
     ]
 
     return jsonify({
@@ -727,7 +727,7 @@ def transfer_idr():
 
     waktu = datetime.now().isoformat(' ', 'seconds')
     struk = [
-        '------------------------------------------------------',
+        '--------------------------------------------------',
         TERMS['header_transfer'].split('\n')[0],
         TERMS['transaksi_selesai'],
         TERMS['bank_receipt'].format(KUMPULAN_BANK[kode_bank]),
@@ -736,7 +736,7 @@ def transfer_idr():
         TERMS['jumlah_transfer_receipt'].format(format_rupiah(nominal_transfer)),
         TERMS['sisa_saldo_receipt'].format(format_rupiah(user_data['saldo'])),
         TERMS['waktu_transaksi_receipt'].format(waktu),
-        '------------------------------------------------------'
+        '--------------------------------------------------'
     ]
 
     return jsonify({

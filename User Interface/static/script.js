@@ -234,6 +234,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const receiptPaper = document.createElement('div');
         receiptPaper.className = 'receipt-paper';
         receiptPaper.textContent = receiptContent;
+        
+        receiptPaper.addEventListener('click', function(e) {
+            e.stopPropagation();
+            playSound('buttonClick');
+            openReceiptModal(receiptContent);
+        });
+        
+        receiptPaper.title = 'Klik untuk melihat detail / Click to view details';
+        
         receiptContainer.appendChild(receiptPaper);
         setTimeout(() => {
             playSound('receiptPrint');
@@ -252,6 +261,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }, index * 100);
         });
     }
+
+    function openReceiptModal(receiptText) {
+        const modal = document.getElementById('receipt-modal');
+        const modalText = document.getElementById('receipt-modal-text');
+        
+        modalText.textContent = receiptText;
+        modal.classList.add('active');
+        
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.closeReceiptModal = function() {
+        const modal = document.getElementById('receipt-modal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('receipt-modal');
+        if (e.target === modal) {
+            closeReceiptModal();
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeReceiptModal();
+        }
+    });
 
     function animateCardIn() {
         playSound('cardInsert');
@@ -687,7 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderCurrentState() {
         switch (appState) {
             case 'INIT':
-                showScreen(currentTerms['selamat_datang'] + '\n' + currentTerms['masukkan_kartu_prompt'] + '\n' + currentTerms['tekan_enter_kartu'] + '\n\n//' + '\nWelcome to Bank Berkom A Tebal' + '\nInsert your card to start' + '\nPress Enter to insert card');
+                showScreen('===== BANK BERKOM A TEBAL =====' + '\n\n' +currentTerms['selamat_datang'] + '\n' + currentTerms['masukkan_kartu_prompt'] + '\n' + currentTerms['tekan_enter_kartu'] + '\n\n//' + '\nWelcome to Bank Berkom A Tebal' + '\nInsert your card to start' + '\nPress Enter to insert card');
                 break;
 
             case 'CARD_INSERTING':
@@ -1103,7 +1141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             '---------------------------------------------------',
             currentTerms['header_receipt_tarik'],
             currentTerms['jumlah_receipt'].replace('{}', formatCurrencyJS(amount, 'IDR')),
-            `Pecahan/Denominations     : ${noteCount} lembar (sheets) ${valueStr}`,
+            `Pecahan/Denominations: ${noteCount} lembar (sheets) ${valueStr}`,
             currentTerms['sisa_saldo_receipt'].replace('{}', saldoTerkini),
             currentTerms['waktu_transaksi_receipt'].replace('{}', waktu),
             '---------------------------------------------------'

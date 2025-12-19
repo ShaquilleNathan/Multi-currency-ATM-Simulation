@@ -83,6 +83,13 @@
         <div id="loading-spinner"></div>
     </div>
 
+    <div id="receipt-modal">
+        <div class="receipt-modal-content">
+            <button class="receipt-modal-close" onclick="closeReceiptModal()">×</button>
+            <div id="receipt-modal-text"></div>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
